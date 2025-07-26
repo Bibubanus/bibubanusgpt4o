@@ -1,0 +1,38 @@
+name: CI for ULTIMAI reasoning
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - agent_research2.zip
+      - .github/workflows/ci.yml
+      - '**.py'
+      - '**.md'
+      - '**.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          unzip -o agent_research2.zip -d agent_code
+          python -m pip install --upgrade pip
+          pip install -r agent_code/requirements.txt
+          pip install pytest
+
+      - name: Run tests
+        run: |
+          cd agent_code
+          pytest -q --disable-warnings
