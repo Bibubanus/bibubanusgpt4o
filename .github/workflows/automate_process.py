@@ -14,7 +14,7 @@ reasoning_prompt = "Generate a reasoning patch for ULTIMAI memetic loop integrit
 
 # 🧠 Обновлённый синтаксис для chat/completions
 response = openai.chat.completions.create(
-    model="gpt-4",
+    model="gpt-4o",
     messages=[
         {"role": "system", "content": "You are a reasoning architect for a self-evolving AI ecosystem."},
         {"role": "user", "content": reasoning_prompt}
