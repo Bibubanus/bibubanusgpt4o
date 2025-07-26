@@ -1,51 +1,31 @@
+# automate_process.py — ULTIMAI v1.1 (обновлено под OpenAI SDK >=1.0.0)
+
 import openai
-import requests
-from bs4 import BeautifulSoup
-import json
 import os
 
-# Установите свой API-ключ
-openai.api_key = os.getenv('OPENAI_API_KEY')
+# Убедитесь, что у вас установлен openai>=1.0.0
+# pip install --upgrade openai
 
-# Функция для поиска информации в интернете
-def search_internet(query):
-    search_url = f"https://www.google.com/search?q={query}"
-    response = requests.get(search_url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    results = soup.find_all('h3')
-    return [result.get_text() for result in results[:5]]
+# Получаем API-ключ из переменных окружения или GitHub Secrets
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# Функция для анализа данных
-def analyze_data(data):
-    # Простая обработка данных (например, подсчет частоты ключевых слов)
-    analysis_result = {word: data.count(word) for word in set(data.split())}
-    return analysis_result
+# 📂 Данные для reasoning (примеры)
+reasoning_prompt = "Generate a reasoning patch for ULTIMAI memetic loop integrity."
 
-# Функция для обновления настроек модели
-def update_model_settings(settings):
-    with open('model_settings.json', 'w') as f:
-        json.dump(settings, f)
+# 🧠 Обновлённый синтаксис для chat/completions
+response = openai.chat.completions.create(
+    model="gpt-4",
+    messages=[
+        {"role": "system", "content": "You are a reasoning architect for a self-evolving AI ecosystem."},
+        {"role": "user", "content": reasoning_prompt}
+    ]
+)
 
-# Основной процесс автоматизации
-def automate_process():
-    query = "latest advancements in AI"
-    search_results = search_internet(query)
-    
-    # Анализ результатов поиска
-    analysis_result = analyze_data(" ".join(search_results))
-    
-    # Обновление настроек модели на основе анализа
-    new_settings = {"improvements": analysis_result}
-    update_model_settings(new_settings)
-    
-    # Внесение новых настроек в модель
-    response = openai.Model.update_settings(
-        model="your-model-id",
-        settings=new_settings
-    )
-    
-    return response
+# 💾 Сохраняем результат
+output_text = response.choices[0].message.content
 
-# Запуск автоматизированного процесса
-response = automate_process()
-print(response)
+with open("REASONING_RESULT.md", "w", encoding="utf-8") as f:
+    f.write("# 🧠 Auto-Generated Reasoning Patch\n\n")
+    f.write(output_text)
+
+print("✅ REASONING_RESULT.md сгенерирован и готов к коммиту")
