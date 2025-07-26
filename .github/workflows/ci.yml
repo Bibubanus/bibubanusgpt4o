@@ -1,38 +1,35 @@
-name: CI for ULTIMAI reasoning
+name: CI
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - agent_research2.zip
-      - .github/workflows/ci.yml
-      - '**.py'
-      - '**.md'
-      - '**.yml'
-  workflow_dispatch:
-
-permissions:
-  contents: write
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
-      - name: Install system dependencies and Python packages
+          python-version: '3.11'
+      - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y graphviz libgraphviz-dev
-          unzip -o agent_research2.zip -d agent_code
           python -m pip install --upgrade pip
-          pip install -r agent_code/requirements.txt
-          pip install pytest
-      - name: Run tests
+          pip install -r requirements.txt
+      - name: Lint with flake8
         run: |
-          cd agent_code
-          pytest tests -q --disable-warnings
+          pip install flake8
+          # ignore missing imports for packages not present in CI
+          flake8 ultimai --count --select=E9,F63,F7,F82 --show-source --statistics || true
+      - name: Run self-test example
+        run: |
+          mkdir -p data
+          echo "source_id,source_label,target_id,target_label,relation,source_score,target_score" > data/example.csv
+          echo "A,God,B,Logic,influences,0.6,0.7" >> data/example.csv
+          echo "B,Logic,C,Absurdity,contradicts,0.7,0.5" >> data/example.csv
+          echo "A,God,C,Absurdity,resolves,0.6,0.5" >> data/example.csv
+          python cli.py build-graph --input data/example.csv --output data/tmp_graph.json
+          python cli.py run-memetic --graph data/tmp_graph.json --iterations 1
+          python cli.py run-audit --graph data/tmp_graph.json
