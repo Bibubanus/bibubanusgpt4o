@@ -35,4 +35,4 @@ jobs:
       - name: Run tests
         run: |
           cd agent_code
-          pytest -q --disable-warnings
+          pytest tests -q --disable-warnings
