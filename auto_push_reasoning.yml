@@ -1,0 +1,25 @@
+name: Auto Push Reasoning Files
+
+on:
+  push:
+    paths:
+      - 'REASONING_LOG.md'
+      - 'PATCHLIST.md'
+      - 'SUMMARY.md'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  autopush:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Auto-commit reasoning files
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "🧠 ULTIMAI reasoning update v1.0"
+          file_pattern: 'REASONING_LOG.md PATCHLIST.md SUMMARY.md'
