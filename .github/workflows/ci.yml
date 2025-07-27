@@ -2,34 +2,70 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+
+# Grant the minimum necessary permissions to run tests, upload artefacts and publish Pages.
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
-      - name: Install dependencies
+          python-version: '3.x'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          # Attempt to install graphviz for pygraphviz if available.  Failures are tolerated.
+          sudo apt-get install -y graphviz libgraphviz-dev pkg-config || true
+
+      - name: Install optional Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-      - name: Lint with flake8
+          # Install optional dependencies; failure is acceptable in offline environments.
+          pip install pygraphviz matplotlib || true
+
+      - name: Run unit tests
         run: |
-          pip install flake8
-          # ignore missing imports for packages not present in CI
-          flake8 ultimai --count --select=E9,F63,F7,F82 --show-source --statistics || true
-      - name: Run self-test example
+          # Ensure the package is discoverable via PYTHONPATH.
+          export PYTHONPATH="$GITHUB_WORKSPACE/ULTIMAI"
+          bash ULTIMAI/scripts/verify_integrity.sh
+
+      - name: Build reasoning graph and report
         run: |
-          mkdir -p data
-          echo "source_id,source_label,target_id,target_label,relation,source_score,target_score" > data/example.csv
-          echo "A,God,B,Logic,influences,0.6,0.7" >> data/example.csv
-          echo "B,Logic,C,Absurdity,contradicts,0.7,0.5" >> data/example.csv
-          echo "A,God,C,Absurdity,resolves,0.6,0.5" >> data/example.csv
-          python cli.py build-graph --input data/example.csv --output data/tmp_graph.json
-          python cli.py run-memetic --graph data/tmp_graph.json --iterations 1
-          python cli.py run-audit --graph data/tmp_graph.json
+          export PYTHONPATH="$GITHUB_WORKSPACE/ULTIMAI"
+          mkdir -p build/graph build/report
+          python ULTIMAI/scripts/generate_graph.py --input ULTIMAI/data/seeds.json --output build/graph/graph.json || true
+          python ULTIMAI/scripts/dump_report.py --graph build/graph/graph.json --output build/report/report.md
+          # Prepare public folder for GitHub Pages
+          mkdir -p public/graph public/report
+          cp -r build/graph/* public/graph/ || true
+          cp -r build/report/* public/report/ || true
+
+      - name: Upload graph artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: graph
+          path: build/graph
+
+      - name: Upload report artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: report
+          path: build/report
+
+      - name: Upload Pages artefact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: public

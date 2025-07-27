@@ -1,0 +1,29 @@
+[
+  {
+    "source_id": "A",
+    "source_label": "Alpha",
+    "target_id": "B",
+    "target_label": "Beta",
+    "relation": "influences",
+    "source_score": 0.6,
+    "target_score": 0.7
+  },
+  {
+    "source_id": "B",
+    "source_label": "Beta",
+    "target_id": "C",
+    "target_label": "Gamma",
+    "relation": "contradicts",
+    "source_score": 0.7,
+    "target_score": 0.5
+  },
+  {
+    "source_id": "A",
+    "source_label": "Alpha",
+    "target_id": "C",
+    "target_label": "Gamma",
+    "relation": "resolves",
+    "source_score": 0.6,
+    "target_score": 0.5
+  }
+]

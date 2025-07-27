@@ -1,0 +1,8 @@
+Nodes:
+  A: {'label': 'Alpha', 'type': 'concept', 'source': None, 'score': 0.6, 'metadata': {}}
+  B: {'label': 'Beta', 'type': 'concept', 'source': None, 'score': 0.7, 'metadata': {}}
+  C: {'label': 'Gamma', 'type': 'concept', 'source': None, 'score': 0.5, 'metadata': {}}
+Edges:
+  A -> B: {'relation': 'influences', 'weight': 1.0}
+  A -> C: {'relation': 'resolves', 'weight': 1.0}
+  B -> C: {'relation': 'contradicts', 'weight': 1.0}

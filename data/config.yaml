@@ -1,0 +1,5 @@
+{
+  "memetic_iterations": 2,
+  "quarantine_threshold": 0.3,
+  "reintegrate_threshold": 0.4
+}
