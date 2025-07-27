@@ -1,0 +1,51 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "id": "A",
+      "label": "Alpha",
+      "type": "concept",
+      "source": null,
+      "score": 0.6,
+      "metadata": {}
+    },
+    {
+      "id": "B",
+      "label": "Beta",
+      "type": "concept",
+      "source": null,
+      "score": 0.7,
+      "metadata": {}
+    },
+    {
+      "id": "C",
+      "label": "Gamma",
+      "type": "concept",
+      "source": null,
+      "score": 0.5,
+      "metadata": {}
+    }
+  ],
+  "links": [
+    {
+      "source": "A",
+      "target": "B",
+      "relation": "influences",
+      "weight": 1.0
+    },
+    {
+      "source": "A",
+      "target": "C",
+      "relation": "resolves",
+      "weight": 1.0
+    },
+    {
+      "source": "B",
+      "target": "C",
+      "relation": "contradicts",
+      "weight": 1.0
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+# This project minimises external dependencies.
+# Optional packages (matplotlib, pygraphviz) can be installed for graph visualisation.
