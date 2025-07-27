@@ -4,48 +4,48 @@
   "graph": {},
   "nodes": [
     {
-      "id": "A",
       "label": "Alpha",
       "type": "concept",
       "source": null,
       "score": 0.6,
-      "metadata": {}
+      "metadata": {},
+      "id": "A"
     },
     {
-      "id": "B",
       "label": "Beta",
       "type": "concept",
       "source": null,
       "score": 0.7,
-      "metadata": {}
+      "metadata": {},
+      "id": "B"
     },
     {
-      "id": "C",
       "label": "Gamma",
       "type": "concept",
       "source": null,
       "score": 0.5,
-      "metadata": {}
+      "metadata": {},
+      "id": "C"
     }
   ],
   "links": [
     {
-      "source": "A",
-      "target": "B",
       "relation": "influences",
-      "weight": 1.0
-    },
-    {
+      "weight": 1.0,
       "source": "A",
-      "target": "C",
-      "relation": "resolves",
-      "weight": 1.0
+      "target": "B"
     },
     {
-      "source": "B",
-      "target": "C",
+      "relation": "resolves",
+      "weight": 1.0,
+      "source": "A",
+      "target": "C"
+    },
+    {
       "relation": "contradicts",
-      "weight": 1.0
+      "weight": 1.0,
+      "source": "B",
+      "target": "C"
     }
   ]
 }
