@@ -36,10 +36,13 @@ class Critic:
         mean_score = sum(scores) / len(scores)
         # Centralisation: measure how balanced degree distribution is
         degrees = [deg for _, deg in g.degree()]
-        if len(degrees) > 1:
+        if len(degrees) > 2:
             max_deg = max(degrees)
-            centralisation = sum(max_deg - d for d in degrees) / ((len(degrees) - 1) * (len(degrees) - 2) + 1e-9)
+            # Use the proper Freeman centralization formula denominator
+            max_possible_sum = (len(degrees) - 1) * (len(degrees) - 2)
+            centralisation = sum(max_deg - d for d in degrees) / max_possible_sum
         else:
+            # For graphs with 2 or fewer nodes, centralization is not meaningful
             centralisation = 0.0
         # Invert centralisation (1 = perfectly balanced, 0 = highly centralised)
         inv_centralisation = 1.0 - min(1.0, centralisation)
