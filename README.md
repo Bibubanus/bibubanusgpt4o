@@ -31,6 +31,64 @@ make report
 
 5. See `docs/` for architecture overview, FAQs and logs.
 
+## Docker support
+
+The project can be run in Docker containers for isolated and reproducible environments.
+
+### Build and run with Docker
+
+1. **Build the Docker image:**
+
+```bash
+docker build -t ultimai:latest .
+```
+
+2. **Run tests in Docker:**
+
+```bash
+docker run --rm ultimai:latest
+```
+
+3. **Generate graph in Docker:**
+
+```bash
+docker run --rm -v $(pwd)/build:/app/build -v $(pwd)/data:/app/data ultimai:latest python scripts/generate_graph.py --input data/seeds.json --output build/graph/graph.json
+```
+
+4. **Generate report in Docker:**
+
+```bash
+docker run --rm -v $(pwd)/build:/app/build ultimai:latest python scripts/dump_report.py --graph build/graph/graph.json --output build/report/report.md
+```
+
+### Using Docker Compose
+
+Docker Compose provides a simpler way to run multiple services:
+
+1. **Run tests:**
+
+```bash
+docker compose run --rm ultimai
+```
+
+2. **Generate graph:**
+
+```bash
+docker compose run --rm generate-graph
+```
+
+3. **Generate report:**
+
+```bash
+docker compose run --rm generate-report
+```
+
+4. **Build all services:**
+
+```bash
+docker compose build
+```
+
 ## Repository structure
 
 ```
@@ -38,7 +96,12 @@ ULTIMAI/
 ├── pyproject.toml          # Packaging configuration
 ├── requirements.txt        # Optional dependencies (mostly empty)
 ├── Makefile                # Common tasks (tests, build, report)
+├── Dockerfile              # Docker image definition
+├── docker-compose.yml      # Docker Compose orchestration
+├── .dockerignore           # Docker build exclusions
+├── .gitignore              # Git exclusions
 ├── README.md               # This file
+├── DOCKER_QUICKSTART.md    # Quick Docker reference
 ├── SECURITY.md             # Security policy
 ├── CONTRIBUTING.md         # Contribution guidelines
 ├── CODEOWNERS              # Ownership information
@@ -68,6 +131,7 @@ ULTIMAI/
 ├── docs/                   # Documentation and logs
 │   ├── index.md
 │   ├── architecture.md
+│   ├── docker.md           # Docker usage guide
 │   ├── faq.md
 │   ├── risks.md
 │   ├── proof-log.md

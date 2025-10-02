@@ -1,0 +1,45 @@
+services:
+  ultimai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ultimai:latest
+    container_name: ultimai
+    volumes:
+      # Mount build and public directories for outputs
+      - ./build:/app/build
+      - ./public:/app/public
+      # Mount data directory for easy seed file updates
+      - ./data:/app/data
+    environment:
+      - PYTHONPATH=/app
+    command: python tests/run_tests.py
+
+  # Service for generating graph
+  generate-graph:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ultimai:latest
+    container_name: ultimai-generate-graph
+    volumes:
+      - ./build:/app/build
+      - ./data:/app/data
+    environment:
+      - PYTHONPATH=/app
+    command: python scripts/generate_graph.py --input data/seeds.json --output build/graph/graph.json
+
+  # Service for generating report
+  generate-report:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ultimai:latest
+    container_name: ultimai-generate-report
+    volumes:
+      - ./build:/app/build
+    environment:
+      - PYTHONPATH=/app
+    command: python scripts/dump_report.py --graph build/graph/graph.json --output build/report/report.md
+    depends_on:
+      - generate-graph
