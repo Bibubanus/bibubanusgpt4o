@@ -4,9 +4,10 @@ on:
   push:
     paths:
       - 'automate_process.py'
-      - 'REASONING_LOG.md'
-      - 'PATCHLIST.md'
-      - 'SUMMARY.md'
+      - 'PROOF_LOG.md'
+      - 'patchlist.md'
+      - 'summary.md'
+      - 'CROSS_REFERENCE_LOG.md'
   workflow_dispatch:
 
 permissions:
