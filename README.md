@@ -96,7 +96,12 @@ ULTIMAI/
 ├── pyproject.toml          # Packaging configuration
 ├── requirements.txt        # Optional dependencies (mostly empty)
 ├── Makefile                # Common tasks (tests, build, report)
+├── Dockerfile              # Docker image definition
+├── docker-compose.yml      # Docker Compose orchestration
+├── .dockerignore           # Docker build exclusions
+├── .gitignore              # Git exclusions
 ├── README.md               # This file
+├── DOCKER_QUICKSTART.md    # Quick Docker reference
 ├── SECURITY.md             # Security policy
 ├── CONTRIBUTING.md         # Contribution guidelines
 ├── CODEOWNERS              # Ownership information
@@ -126,6 +131,7 @@ ULTIMAI/
 ├── docs/                   # Documentation and logs
 │   ├── index.md
 │   ├── architecture.md
+│   ├── docker.md           # Docker usage guide
 │   ├── faq.md
 │   ├── risks.md
 │   ├── proof-log.md
