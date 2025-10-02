@@ -1,0 +1,7 @@
+networkx>=3.1
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.3
+tqdm>=4.66
+matplotlib>=3.7
+pygraphviz>=1.11  # optional: used by visualize_graph script if installed
