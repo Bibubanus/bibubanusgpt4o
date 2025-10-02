@@ -25,21 +25,33 @@ class Quarantine:
         nodes remain in the graph, but could be handled separately by other
         modules (e.g. ignored in memetic evolution) and tagged for review.
         """
-        for node, attrs in list(reasoning_graph.graph.nodes(data=True)):
+        newly_quarantined = []
+        quarantined_set = set(self.quarantined)  # O(1) lookup instead of O(n)
+        
+        for node, attrs in reasoning_graph.graph.nodes(data=True):
             score = attrs.get('score', 0.5)
-            if score < self.threshold and node not in self.quarantined:
+            if score < self.threshold and node not in quarantined_set:
                 self.quarantined.append(node)
+                quarantined_set.add(node)
+                newly_quarantined.append(node)
                 # Tag node as quarantined
                 reasoning_graph.graph.nodes[node]['quarantined'] = True
-        return self.quarantined
+        return newly_quarantined
 
     def reintegrate(self, reasoning_graph: ReasoningGraph, min_score: float = 0.5) -> List[str]:
         """Attempt to reintegrate quarantined nodes whose score has improved."""
         reintegrated: List[str] = []
-        for node in list(self.quarantined):
+        # Use list comprehension to avoid O(n²) complexity from repeated remove() calls
+        remaining_quarantined = []
+        
+        for node in self.quarantined:
             score = reasoning_graph.graph.nodes[node].get('score', 0.0)
             if score >= min_score:
                 reasoning_graph.graph.nodes[node]['quarantined'] = False
-                self.quarantined.remove(node)
                 reintegrated.append(node)
+            else:
+                remaining_quarantined.append(node)
+        
+        # Replace the quarantined list in one operation instead of multiple remove() calls
+        self.quarantined = remaining_quarantined
         return reintegrated

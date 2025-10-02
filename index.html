@@ -12,6 +12,26 @@
 <body>
   <h1>ULTIMAI Reasoning Patch</h1>
   <pre id="output">[Загрузка reasoning... Жди пару секунд!]</pre>
-  <script src="reasoning_patch.js"></script>
+  <script>
+    // Simple fallback since reasoning_patch.js is missing
+    document.addEventListener('DOMContentLoaded', function() {
+      const output = document.getElementById('output');
+      
+      // Try to load reasoning result from the generated markdown file
+      fetch('REASONING_RESULT.md')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('REASONING_RESULT.md not found');
+          }
+          return response.text();
+        })
+        .then(text => {
+          output.textContent = text;
+        })
+        .catch(error => {
+          output.textContent = `Ошибка загрузки: ${error.message}\n\nПожалуйста, запустите automate_process.py для генерации reasoning данных.`;
+        });
+    });
+  </script>
 </body>
 </html>
