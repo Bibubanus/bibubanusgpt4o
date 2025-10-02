@@ -1,0 +1,59 @@
+# Git files
+.git
+.gitignore
+.github
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+venv/
+ENV/
+env/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation and logs
+docs/
+*.md
+*.pdf
+!README.md
+
+# Zip files
+*.zip
+
+# Public directory (generated)
+public/
+
+# Other
+Makefile
+CODEOWNERS
+SECURITY.md
+CONTRIBUTING.md
+auto_push_reasoning.yml
+autofix_ci_v2.sh
+automate_process.py
+fix_and_push.sh
+flip_to_prod.sh
+force_patch_and_push.sh
+index.html
+main
+patchlist.md
+summary.md
